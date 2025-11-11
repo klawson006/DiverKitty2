@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Ensure responsive design on all devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Violet's Smoothies!</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load required custom fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico:wght@400&display=swap" rel="stylesheet">
+
+    <style>
+        /*
+        Custom CSS Block:
+        This block retains the complex logic that cannot be achieved with standard Tailwind utility classes,
+        such as the SVG wave animations, gradient borders, gradient text, and the star/letter easter egg.
+        */
+        :root {
+            --color-pink: #FFC0CB;
+            --color-sky: #BFF9FF;
+            --color-yellow: #F1DD77;
+            --color-deep-blue: #29A7D0;
+        }
+
+        /* --- Custom Global Styles (Fonts & Background) --- */
+        body {
+            /* Background for the section below the waves */
+            background-image: url('https://raw.githubusercontent.com/klawson006/DiverKitty2/main/background.png');
+            line-height: 1.6;
+        }
+
+        /* --- Wave Background Image (Behind SVG Waves) --- */
+        .waves-background {
+            /* NEW: Image set for the section behind the animated waves */
+            background-image: url('https://raw.githubusercontent.com/klawson006/DiverKitty2/main/wbg.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* --- Gradient Text (for h2 titles) --- */
+        .text-gradient {
+            background-image: linear-gradient(to right, var(--color-sky), var(--color-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback */
+        }
+
+        /* --- Wave Container Border (White to Pink Gradient) --- */
+        .wave-border-bottom {
+            border-bottom: 12px solid transparent; /* Required for border-image */
+            border-image: linear-gradient(to right, var(--color-sky), var(--color-pink)) 1;
+        }
+
+        /* --- Info Box Gradient Border --- */
+        .box-border-gradient {
+            border: 5px solid transparent; /* Required for border-image */
+            border-image: linear-gradient(to right, var(--color-sky), var(--color-pink)) 1;
+        }
+
+        /* --- Star/Easter Egg CSS --- */
+        .star { font-size: 1.6rem; line-height: 1; cursor: default; animation: twinkle 2.5s infinite alternate; }
+        .left-star { position: absolute; left: 20px; color: white; text-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 15px var(--color-sky); }
+        .right-star-wrapper { position: absolute; right: 20px; display: flex; align-items: center; transform: translateX(0); transition: transform 0.5s ease-in-out; cursor: pointer; }
+        .right-star { color: var(--color-yellow); text-shadow: 0 0 8px rgba(241, 221, 119, 0.9), 0 0 15px var(--color-yellow); }
+        .hidden-letter { color: white; font-size: 1.6rem; font-weight: 700; margin-right: -25px; margin-left: 0; opacity: 0; transition: opacity 0.5s ease-in-out; font-family: 'Comfortaa', sans-serif; }
+        .right-star-wrapper.revealed { transform: translateX(-25px); }
+        .right-star-wrapper.revealed .hidden-letter { opacity: 1; }
+        @keyframes twinkle { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } }
+
+        /* --- SVG Wave Animation (Complex Keyframes) --- */
+        .waves-effect use { animation: move-wave 25s cubic-bezier(.55,.5,.45,.5) infinite; opacity: 1; transition: opacity 0.3s; }
+        .waves-effect use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; opacity: 0.5; }
+        .waves-effect use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; opacity: 0.7; }
+        .waves-effect use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; opacity: 0.9; }
+        .waves-effect use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; opacity: 1; }
+        @keyframes move-wave { 0% { transform: translate3d(-90px, 0, 0); } 100% { transform: translate3d(85px, 0, 0); } }
+
+        /* Wave Color Shift Animation (for the SVG gradient stops) */
+        @keyframes gradient-color-shift-pink { 0%, 100% { stop-color: var(--color-pink); } 50% { stop-color: #F8B4C0; } }
+        @keyframes gradient-color-shift-yellow { 0%, 100% { stop-color: var(--color-yellow); } 50% { stop-color: #F5E59C; } }
+        #stop-pink { animation: gradient-color-shift-pink 8s ease-in-out infinite alternate; }
+        #stop-yellow { animation: gradient-color-shift-yellow 8s ease-in-out infinite alternate; }
+
+        /* Custom Fish Bullet List Styling */
+        .custom-list { list-style: none; padding-left: 0; }
+        .custom-list li { position: relative; padding-left: 30px; margin-bottom: 10px; line-height: 1.5; color: #555; font-weight: 400; }
+        .custom-list li::before { content: '🐟'; position: absolute; left: 0; top: 0; font-size: 1.2em; color: var(--color-deep-blue); }
+
+        /* Ensure waves scale correctly on small screens */
+        @media (max-width: 500px) {
+            .waves-background { height: calc(60vh - 40px); }
+            .waves { min-width: 100%; }
+        }
+    </style>
+
+    <!-- Configure Tailwind to use the custom fonts and colors -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              comfortaa: ['Comfortaa', 'sans-serif'],
+              pacifico: ['Pacifico', 'cursive'],
+            },
+            colors: {
+              'pastel-pink': '#FFC0CB',
+              'pastel-sky': '#BFF9FF',
+              'pastel-yellow': '#F1DD77',
+              'ocean-blue': '#29A7D0',
+            },
+          }
+        }
+      }
+    </script>
+</head>
+<body class="font-comfortaa min-h-screen flex flex-col relative bg-fixed bg-cover bg-center">
+
+    <!-- Fixed Navigation Bar -->
+    <nav class="fixed top-0 left-0 z-50 w-full h-10 flex justify-center items-center bg-gradient-to-r from-pastel-sky to-pastel-pink shadow-lg">
+        <!-- Left Star -->
+        <span class="star left-star">★</span>
+
+        <a href="#about" class="text-gray-800 font-bold text-base px-5 hover:text-ocean-blue transition duration-300 transform hover:-translate-y-0.5 nav-link">About</a>
+        <a href="#menu" class="text-gray-800 font-bold text-base px-5 hover:text-ocean-blue transition duration-300 transform hover:-translate-y-0.5 nav-link">Menu</a>
+        <a href="#contact" class="text-gray-800 font-bold text-base px-5 hover:text-ocean-blue transition duration-300 transform hover:-translate-y-0.5 nav-link">Contact</a>
+
+        <!-- Right Star Wrapper - Clickable Area -->
+        <div class="right-star-wrapper" id="clickableStarWrapper">
+            <!-- Hidden Letter (Initially under the star) -->
+            <span class="hidden-letter" id="hiddenB">B</span>
+            <!-- Yellow Star (The element that slides) -->
+            <span class="star right-star" id="clickableStar">★</span>
+        </div>
+    </nav>
+
+    <!-- Wave Background Container -->
+    <!-- Removed bg-white here and applied background-image in the style block -->
+    <div class="waves-background absolute top-[40px] left-0 w-full h-[calc(50vh-40px)] z-0 overflow-hidden wave-border-bottom">
+        <!-- Subtle Overlay for text readability -->
+        <div class="absolute inset-0 shadow-[inset_0_-50px_50px_-50px_rgba(0,0,0,0.3)]"></div>
+
+        <!-- SVG Definition for the Wave -->
+        <svg class="waves absolute bottom-0 left-0 h-[250px] w-full min-w-[1920px] mb-[-7px]"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+                <path id="wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                <!-- Pink to Yellow Linear Gradient Definition with Stop IDs for Animation -->
+                <linearGradient id="pinkYellowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop id="stop-pink" offset="0%" style="stop-color:var(--color-pink);stop-opacity:1" />
+                    <stop id="stop-yellow" offset="100%" style="stop-color:var(--color-yellow);stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <!-- Group for the animated wave layers -->
+            <g class="waves-effect">
+                <use xlink:href="#wave" x="48" y="0" fill="url(#pinkYellowGradient)" />
+                <use xlink:href="#wave" x="48" y="3" fill="url(#pinkYellowGradient)" />
+                <use xlink:href="#wave" x="48" y="5" fill="url(#pinkYellowGradient)" />
+                <use xlink:href="#wave" x="48" y="7" fill="url(#pinkYellowGradient)" />
+            </g>
+        </svg>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content-overlay relative z-10 flex-grow pt-5 flex flex-col items-center text-center text-gray-800 mt-10 px-5">
+
+        <!-- Hero Section -->
+        <section class="hero-section pt-[1vh]" id="about">
+            <div class="max-w-4xl px-5">
+                <!-- Image remains the same -->
+                <img src="https://raw.githubusercontent.com/klawson006/DiverKitty2/main/logo.PNG"
+                    alt="Violet's Smoothies Logo"
+                    class="max-w-md h-auto rounded-xl mb-5 transition duration-300 hover:scale-105 mx-auto"
+                    onerror="this.onerror=null; this.src='https://placehold.co/400x120/A3D5E4/FFFFFF?text=Violet%27s+Smoothies+Logo+Error';">
+
+                <!-- Transparent blue container for the paragraph -->
+                <div class="bg-sky-400/40 p-6 rounded-2xl mb-10 max-w-3xl shadow-xl backdrop-blur-sm mx-auto">
+                    <p class="text-xl sm:text-2xl font-normal text-white drop-shadow-md">
+                        A Smoothie Bar Based in Seashell Beach, Serving Delicious, 100% natural Smoothies.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Menu Section -->
+        <section class="info-box-container flex flex-col gap-8 items-center max-w-6xl mt-12 pb-12 w-full" id="menu">
+            
+            <!-- Box 1: Smoothies Made Simple -->
+            <div class="info-box bg-white/95 rounded-2xl p-8 box-border-gradient w-full max-w-2xl text-left transition duration-300 hover:transform hover:-translate-y-2 shadow-xl hover:shadow-2xl">
+                <h2 class="font-pacifico text-gradient mb-4 text-3xl font-normal">Smoothies Made Simple</h2>
+                <!-- Content for Smoothies Made Simple -->
+                <ul class="custom-list">
+                    <li>Delicious recipes crafted from fresh, healthy, and high-quality ingredients.</li>
+                    <li>Simple, customizable options for quick and easy morning routines.</li>
+                    <li>Delivery or easy pickup options to enjoy your smoothie anywhere.</li>
+                </ul>
+                <!-- Image is now wrapped in a link to send users to another website -->
+                <a href="https://example.com/smoothie-preparation" target="_blank" rel="noopener noreferrer" class="block mt-5">
+                    <img src="https://placehold.co/400x200/BFF9FF/333?text=Fresh+Smoothies" alt="Placeholder image of fresh smoothies" class="w-full h-auto block rounded-lg opacity-90 shadow-md hover:opacity-100 transition duration-300">
+                </a>
+            </div>
+
+            <!-- Box 2: Paw-some Flavors -->
+            <div class="info-box bg-white/95 rounded-2xl p-8 box-border-gradient w-full max-w-2xl text-left transition duration-300 hover:transform hover:-translate-y-2 shadow-xl hover:shadow-2xl">
+                <h2 class="font-pacifico text-gradient mb-4 text-3xl font-normal">Paw-some Flavors</h2>
+                <p class="text-gray-600">
+                    Explore our rotating menu of whimsical, pet-themed flavor combinations, like the **"Diver Kitty Special"** (mango-banana) and **"Panda Pop"** (blackberry-açai). Every smoothie is an adventure!
+                </p>
+                <img src="https://placehold.co/400x200/FFC0CB/333?text=Whimsical+Flavors" alt="Placeholder image of whimsical, brightly colored smoothies" class="w-full h-auto block mt-5 rounded-lg opacity-90 shadow-md">
+            </div>
+
+            <!-- Box 3: Humble Costs -->
+            <div class="info-box bg-white/95 rounded-2xl p-8 box-border-gradient w-full max-w-2xl text-left transition duration-300 hover:transform hover:-translate-y-2 shadow-xl hover:shadow-2xl">
+                <h2 class="font-pacifico text-gradient mb-4 text-3xl font-normal">Humble Costs</h2>
+                <p class="text-gray-600">
+                    Experiencing poverty since I was small, I know how tight money can be. While some smoothie bars pride themselves on quality, natural drinks, a healthy drink should never come at a pricely cost. All menu items from Violet's Smoothies are **never more than 10 R$**. That's the &copy;Violet Deal!
+                </p>
+                <img src="https://placehold.co/400x200/F1DD77/333?text=Low+Prices+Guarantee" alt="Placeholder image of a marketing graph" class="w-full h-auto block mt-5 rounded-lg opacity-90 shadow-md">
+            </div>
+        </section>
+
+        <!-- Dedicated Contact Section -->
+        <section class="info-box-container flex flex-col gap-8 items-center max-w-6xl w-full pb-20" id="contact">
+            <div class="info-box bg-white/95 rounded-2xl p-8 box-border-gradient w-full max-w-2xl text-left shadow-xl">
+                <h2 class="font-pacifico text-gradient mb-4 text-3xl font-normal">Get Connected</h2>
+                <p class="text-gray-600 mb-4">
+                    Ready to ride the wave with me? Join the Smoothie Community on the official Youtube Channel, or post your own review on the review website to win a chance for a 50% discount on your next order. Your feedback is appreciated!
+                </p>
+                <ul class="custom-list">
+                    <li><strong>Email:</strong> <a href="mailto:violetssmoothies@gmail.com" class="text-ocean-blue hover:text-pastel-pink transition">violetssmoothies@gmail.com</a></li>
+                    <li><strong>Official Youtube Channel:</strong> <a href="https://youtube.com/@violetssmoothies?si=gN4P9cuY2pt_kwbl" target="_blank" rel="noopener noreferrer" class="text-ocean-blue hover:text-pastel-pink transition">Violets Smoothies</a></li>
+                    <li><strong>Review Site:</strong> violetsreviews.carrd.co</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-pastel-pink to-pastel-sky text-gray-800 p-8 border-t-4 border-white shadow-inner font-comfortaa">
+        <div class="flex flex-col md:flex-row justify-around max-w-4xl mx-auto text-center md:text-left gap-6">
+            <div class="footer-info">
+                <h3 class="font-pacifico text-2xl mb-2">Violet's Smoothies</h3>
+                <p class="text-sm">&copy; 2025 violet_puddins. All rights reserved.</p>
+                <p class="text-sm">Seashell Beach, Robloxia</p>
+            </div>
+            
+            <div class="footer-links">
+                <h3 class="font-comfortaa font-bold text-lg mb-2">Quick Links</h3>
+                <p class="space-x-4">
+                    <a href="#about" class="text-ocean-blue hover:text-pastel-yellow transition text-sm">Serve</a>
+                    <span class="text-gray-500">|</span>
+                    <a href="#menu" class="text-ocean-blue hover:text-pastel-yellow transition text-sm">Sip</a>
+                    <span class="text-gray-500">|</span>
+                    <a href="#contact" class="text-ocean-blue hover:text-pastel-yellow transition text-sm">Satisfy</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.getElementById('clickableStarWrapper');
+            
+            // Toggle the 'revealed' class on click
+            if (wrapper) {
+                // Attach both click and touchstart for better mobile support
+                const toggleRevealed = (e) => {
+                    // Prevent default behavior to avoid issues like phantom clicks on touch devices
+                    if (e.type === 'touchstart') e.preventDefault();
+                    wrapper.classList.toggle('revealed');
+                };
+
+                wrapper.addEventListener('click', toggleRevealed);
+                wrapper.addEventListener('touchstart', toggleRevealed);
+            }
+        });
+    </script>
+
+</body>
